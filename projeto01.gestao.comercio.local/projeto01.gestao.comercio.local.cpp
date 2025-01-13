@@ -92,7 +92,7 @@ void excluirProduto(string stock[][20], int& totalProdutos, int produtos) {
 
 void checkout(string stock[][20], int totalProdutos) {
 
-	string idSell;
+	string idSell, quantSell; 
 	cout << endl;
 	cout << "____________________" << endl; 
 	cout << "Registro de vendas " << endl; 
@@ -102,7 +102,19 @@ void checkout(string stock[][20], int totalProdutos) {
 	for (int i = 0; i < totalProdutos; i++)
 	{
 		if (stock[i][0] == idSell) {
-			
+			cout << "Qual a quantidade que deseja registrar: ";
+			cin >> quantSell;
+			if (stock[i][4] >= quantSell) {
+				int quantidadeStock = stoi(stock[i][4]);
+				int quantidadeSell = stoi(idSell);
+				quantidadeStock 
+			}
+			else {
+				cout << "Quantidade insuficiente no stock.";
+			}
+		}
+		else {
+			cout << "ID incorreto!";
 		}
 	}
 
