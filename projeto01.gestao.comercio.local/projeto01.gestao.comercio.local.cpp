@@ -5,66 +5,113 @@
 
 using namespace std;
 
-void exibirStock(string stock[][20], int totalProdutos) { 
-	
+
+void exibirStock(string stock[][20],  int totalProdutos) {
+
 	if (totalProdutos == 0) {
-		cout << "O estoque está vazio!" << endl;
+		cout << "Estoque está vazio!" << endl;
 		return;
 	}
 
-	//stock existente
-	stock[0][0] = "101";
-	stock[0][1] = "T-Shirt";
-	stock[0][2] = "15.0";
-	stock[0][3] = "20";
-
-	stock[1][0] = "102";
-	stock[1][1] = "Bermuda";
-	stock[1][2] = "45.0";
-	stock[1][3] = "35";
-	
 	cout << endl; 
-	cout << ">>> Produtos no Estoque <<< "<< endl;
-	for (int i = 0; i < totalProdutos; i++) 
+	cout << ">>> ESTOQUE <<<" << endl; 
+	for (int i = 0; i < totalProdutos; i++)
 	{
-		if (stock[i][0] != "") {
-			cout << "ID: " << stock[i][0] << " | Nome: " << stock[i][1] << " | Preço: " << stock[i][2] << " | Quantidade: " << stock[i][3] << endl;
+		if (stock[i][0] != "") { 
+			cout << "ID: " << stock[i][0] << " | Nome: " << stock[i][1] << " | Valor: " << stock[i][2] << " | Quantidade: " << stock[i][3] << endl;
 		}
 	}
+
 }
 
-void adicionarStock(string stock[][20], int& totalProdutos, int linhas) {
-
-	if (totalProdutos >= linhas) {
-		cout << "Estoque cheio! Não é possível adicionar mais produtos." << endl;
+void addProduto(string stock[][20], int& totalProdutos, int produtos) {
+	
+	if (totalProdutos >= produtos) {
+		cout << "Estoque cheio!" << endl;
 		return;
 	}
 
-	//vetor para armazenar os dados do produto
-	string dadosProduto[4];
-	string tipos[4] = { "ID", "Nome", "Preco", "Quantidade" };
+	cout << endl; 
+	cout << "_________________________" << endl;
+	cout << ">>> Adicionar Estoque <<<" << endl;
+	cout << "-------------------------" << endl;
+	exibirStock(stock, totalProdutos);
+	cout << endl;
+
+	string dadosProdutos[4];
+	string tipos[4] = { "ID", "Nome", "Valor", "Quantidade" };
+
+	cin.ignore(); 
+	for (int i = 0; i < 4 ; i++)
+	{
+		cout << "Qual " << tipos[i] << " do produto: ";
+		getline(cin, dadosProdutos[i]);
+	}
 	
-	//adicionar os dados do novo produto
+
 	for (int i = 0; i < 4; i++)
 	{
-		cout << "Digite o " << tipos[i] << " do produto: ";
-		getline(cin, dadosProduto[i]); //le os dados do produto  
-		cin.ignore(); 
+		stock[totalProdutos][i] = dadosProdutos[i];
 	}
-
-	//adiciona os dados ao stock
-	for (int i = 0; i < 4; i++)
-	{
-		stock[totalProdutos][i] = dadosProduto[i]; //preenche as colunas do produto
-	}
-
-	totalProdutos++; 
+	
+	totalProdutos++;
+	cout << endl;
 	cout << "Produto adicionado com sucesso!" << endl;
 
-} 
+}	
 
-void menu(string stock[][20], int& totalProdutos, int linhas) {   
-	int opcao; 
+void excluirProduto(string stock[][20], int& totalProdutos, int produtos) {
+
+	string idDel;
+	cout << endl; 
+	cout << "_________________________" << endl;
+	cout << ">>> Excluir Estoque <<<" << endl;
+	cout << "-------------------------" << endl;
+	exibirStock(stock, totalProdutos);
+	cout << endl;
+	cout << "Qual o ID do produto que deseja excluir: ";
+	cin >> idDel;
+	for (int i = 0; i < totalProdutos; i++)
+	{
+		if (stock[i][0] == idDel) {
+			for (int j = i; j < totalProdutos; j++)
+			{
+				for (int k = 0; k < 4; k++)
+				{
+					stock[j][k] = stock[j + 1][k];
+				}
+			}
+		}
+		totalProdutos--;
+		cout << "Produto excluído com sucesso!" << endl;
+		break; 
+	}
+	
+
+}
+
+void checkout(string stock[][20], int totalProdutos) {
+
+	string idSell;
+	cout << endl;
+	cout << "____________________" << endl; 
+	cout << "Registro de vendas " << endl; 
+	cout << "--------------------" << endl;    
+	cout << "Digite o ID do produto que deseja registrar: ";
+	cin >> idSell;
+	for (int i = 0; i < totalProdutos; i++)
+	{
+		if (stock[i][0] == idSell) {
+			
+		}
+	}
+
+	
+}
+
+void menu(string stock[][20], int& totalProdutos, int produtos) { 
+	int selc;
+	
 	do
 	{
 		cout << endl;
@@ -77,41 +124,58 @@ void menu(string stock[][20], int& totalProdutos, int linhas) {
 		cout << "4. Exibir Stock Atual" << endl;
 		cout << "5. Sair" << endl;
 		cout << "Escolha uma opcao: ";
-		cin >> opcao;
+		cin >> selc;
 
-		switch (opcao)
+		switch (selc)
 		{
 		case 1:
-			//funcEfetuarVenda(); 
+			checkout(stock);
 			break;
 		case 2:
-			adicionarStock(stock, totalProdutos, linhas);
+			addProduto(stock, totalProdutos, produtos);  
 			break;
 		case 3:
-			//removerProduto();
+			excluirProduto(stock, totalProdutos, produtos); 
 			break;
 		case 4:
 			exibirStock(stock, totalProdutos);  
 			break;
 		case 5:
-			cout << "Saindo..." << endl;
-			break;
+			cout << "Saindo...";
 		default:
-			cout << "Opcao invalida!";
+			break;
 		}
-	} while (opcao != 5);
+
+	} while (selc != 5);
 }
+
 
 int main() {
 
 	setlocale(LC_ALL, "");
 
-	//gestão de stock
-	const int linhas = 20, colunas = 20;
-	string stock[linhas][colunas];
+	//stock
+	const int produtos = 20, colunas = 20; 
+	string stock[produtos][colunas]; 
 	int totalProdutos = 2; 
 
-	//menu principal
-	menu(stock, totalProdutos, linhas);  
-	return 0; 
+	stock[0][0] = "101";
+	stock[0][1] = "T-Shirt";
+	stock[0][2] = "17.0";
+	stock[0][3] = "30";
+
+	stock[1][0] = "102";
+	stock[1][1] = "Bermuda";
+	stock[1][2] = "24.0";
+	stock[1][3] = "35";
+
+
+	//menu
+	menu(stock, totalProdutos, produtos);   
+	return 0;
 }
+
+
+
+
+
