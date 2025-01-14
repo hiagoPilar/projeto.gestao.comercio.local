@@ -60,7 +60,7 @@ void addProduto(string stock[][20], int& totalProdutos, int produtos) {
 
 }	
 
-void excluirProduto(string stock[][20], int& totalProdutos, int produtos) {
+void excluirProduto(string stock[][20], int& totalProdutos) {
 
 	string idDel;
 	cout << endl; 
@@ -92,31 +92,42 @@ void excluirProduto(string stock[][20], int& totalProdutos, int produtos) {
 
 void checkout(string stock[][20], int totalProdutos) {
 
-	string idSell, quantSell; 
-	cout << endl;
-	cout << "____________________" << endl; 
-	cout << "Registro de vendas " << endl; 
-	cout << "--------------------" << endl;    
-	cout << "Digite o ID do produto que deseja registrar: ";
-	cin >> idSell;
-	for (int i = 0; i < totalProdutos; i++)
+	string idBusca, quantVenda;
+	do
 	{
-		if (stock[i][0] == idSell) {
-			cout << "Qual a quantidade que deseja registrar: ";
-			cin >> quantSell;
-			if (stock[i][4] >= quantSell) {
-				int quantidadeStock = stoi(stock[i][4]);
-				int quantidadeSell = stoi(idSell);
-				quantidadeStock 
+		cout << endl;
+		cout << "____________________" << endl;
+		cout << "Registro de vendas " << endl;
+		cout << "--------------------" << endl;
+		cout << "Digite o ID do produto que deseja registrar ou [sair] para finalizar: ";
+		getline(cin, idBusca); 
+		bool idEncontrado = false;  
+		for (int i = 0; i < totalProdutos; i++)
+		{
+			if (stock[i][0] == idBusca) {
+				idEncontrado = true;  
+				cout << "ID registrado..."; 
+				cout << "Qual a quantidade que deseja registrar: ";
+				getline(cin, quantVenda); 
+				if (stoi(stock[i][3]) >= stoi(quantVenda)) { 
+					int quantidadeStock = stoi(stock[i][3]);
+					int quantidadeVenda = stoi(quantVenda);
+					int quantFinal = quantidadeStock - quantidadeVenda;
+					stock[i][3] = to_string(quantFinal);
+					cout << "Venda registrada com sucesso. Quantidade restante: " << stock[i][3] << endl;
+				}
+				else {
+					cout << "Quantidade insuficiente no stock.";
+				}
 			}
-			else {
-				cout << "Quantidade insuficiente no stock.";
-			}
+			break;
 		}
-		else {
-			cout << "ID incorreto!";
+		if (!idEncontrado) {
+			cout << "ID incorreto!" << endl; 
 		}
-	}
+		cout << endl;
+	} while (idBusca != "sair"); 
+	
 
 	
 }
@@ -141,13 +152,13 @@ void menu(string stock[][20], int& totalProdutos, int produtos) {
 		switch (selc)
 		{
 		case 1:
-			checkout(stock);
+			checkout(stock, totalProdutos); 
 			break;
 		case 2:
 			addProduto(stock, totalProdutos, produtos);  
 			break;
 		case 3:
-			excluirProduto(stock, totalProdutos, produtos); 
+			excluirProduto(stock, totalProdutos); 
 			break;
 		case 4:
 			exibirStock(stock, totalProdutos);  
