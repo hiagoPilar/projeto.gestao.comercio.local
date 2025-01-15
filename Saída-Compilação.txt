@@ -1,0 +1,14 @@
+﻿A construção começou em 11:53 AM...
+1>------ Compilação iniciada: Projeto: projeto01.gestao.comercio.local, Configuração: Debug x64 ------
+1>projeto01.gestao.comercio.local.cpp
+1>C:\Users\hiago\source\repos\projeto01.gestao.comercio.local\projeto01.gestao.comercio.local\projeto01.gestao.comercio.local.cpp(101,37): error C2062: tipo 'int' inesperado
+1>C:\Users\hiago\source\repos\projeto01.gestao.comercio.local\projeto01.gestao.comercio.local\projeto01.gestao.comercio.local.cpp(135,18): error C2065: 'totalCompras': identificador não declarado
+1>C:\Users\hiago\source\repos\projeto01.gestao.comercio.local\projeto01.gestao.comercio.local\projeto01.gestao.comercio.local.cpp(136,18): error C2065: 'totalCompras': identificador não declarado
+1>C:\Users\hiago\source\repos\projeto01.gestao.comercio.local\projeto01.gestao.comercio.local\projeto01.gestao.comercio.local.cpp(137,18): error C2065: 'totalCompras': identificador não declarado
+1>C:\Users\hiago\source\repos\projeto01.gestao.comercio.local\projeto01.gestao.comercio.local\projeto01.gestao.comercio.local.cpp(138,6): error C2065: 'totalCompras': identificador não declarado
+1>C:\Users\hiago\source\repos\projeto01.gestao.comercio.local\projeto01.gestao.comercio.local\projeto01.gestao.comercio.local.cpp(157,45): error C2065: 'totalCompras': identificador não declarado
+1>C:\Users\hiago\source\repos\projeto01.gestao.comercio.local\projeto01.gestao.comercio.local\projeto01.gestao.comercio.local.cpp(181,49): error C2065: 'totalCompras': identificador não declarado
+1>C:\Users\hiago\source\repos\projeto01.gestao.comercio.local\projeto01.gestao.comercio.local\projeto01.gestao.comercio.local.cpp(183,73): error C2065: 'totalCompras': identificador não declarado
+1>Projeto de compilação pronto "projeto01.gestao.comercio.local.vcxproj" -- FALHA.
+========== Compilação: 0 bem-sucedida, 1 com falha, 0 atualizada, 0 ignorada ==========
+========== Compilação concluído às 11:53 AM e levou 02.310 segundos ==========

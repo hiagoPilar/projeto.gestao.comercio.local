@@ -3,10 +3,11 @@
 #include<string>
 #include<locale>
 
+
 using namespace std;
 
 
-void exibirStock(string stock[][20],  int totalProdutos) {
+void exibirStock(string stock[][4],  int totalProdutos) {
 
 	if (totalProdutos == 0) {
 		cout << "Estoque está vazio!" << endl;
@@ -24,7 +25,7 @@ void exibirStock(string stock[][20],  int totalProdutos) {
 
 }
 
-void addProduto(string stock[][20], int& totalProdutos, int produtos) {
+void addProduto(string stock[][4], int& totalProdutos, int produtos) {
 	
 	if (totalProdutos >= produtos) {
 		cout << "Estoque cheio!" << endl;
@@ -60,7 +61,7 @@ void addProduto(string stock[][20], int& totalProdutos, int produtos) {
 
 }	
 
-void excluirProduto(string stock[][20], int& totalProdutos) {
+void excluirProduto(string stock[][4], int& totalProdutos) {
 
 	string idDel;
 	cout << endl; 
@@ -71,9 +72,11 @@ void excluirProduto(string stock[][20], int& totalProdutos) {
 	cout << endl;
 	cout << "Qual o ID do produto que deseja excluir: ";
 	cin >> idDel;
+	bool idEncontrado = false;
 	for (int i = 0; i < totalProdutos; i++)
 	{
 		if (stock[i][0] == idDel) {
+			idEncontrado = true;
 			for (int j = i; j < totalProdutos; j++)
 			{
 				for (int k = 0; k < 4; k++)
@@ -86,13 +89,18 @@ void excluirProduto(string stock[][20], int& totalProdutos) {
 		cout << "Produto excluído com sucesso!" << endl;
 		break; 
 	}
-	
-
+	if (!idEncontrado) {
+		cout << "ID não encontrado!";
+	}
 }
 
-void checkout(string stock[][20], int totalProdutos) {
+void checkout(string stock[][4], int totalProdutos) {
 
-	string idBusca, quantVenda;
+	string idBusca, quantRegistrada;
+	string compraAtual[20][3]; 
+	int numFatura = 0, numCliente = 0, int totalCompras = 0;
+	
+	cin.ignore();
 	do
 	{
 		cout << endl;
@@ -101,38 +109,96 @@ void checkout(string stock[][20], int totalProdutos) {
 		cout << "--------------------" << endl;
 		cout << "Digite o ID do produto que deseja registrar ou [sair] para finalizar: ";
 		getline(cin, idBusca); 
+
+		if (idBusca == "sair") {
+			break;
+		}
+
 		bool idEncontrado = false;  
 		for (int i = 0; i < totalProdutos; i++)
 		{
 			if (stock[i][0] == idBusca) {
 				idEncontrado = true;  
 				cout << "ID registrado..."; 
+
 				cout << "Qual a quantidade que deseja registrar: ";
-				getline(cin, quantVenda); 
-				if (stoi(stock[i][3]) >= stoi(quantVenda)) { 
-					int quantidadeStock = stoi(stock[i][3]);
-					int quantidadeVenda = stoi(quantVenda);
-					int quantFinal = quantidadeStock - quantidadeVenda;
+				getline(cin, quantRegistrada); 
+
+				if (stoi(stock[i][3]) >= stoi(quantRegistrada)) {  
+					int intQuantidadeStock = stoi(stock[i][3]);
+					int intQuantidadeRegistrada = stoi(quantRegistrada);
+					int quantFinal = intQuantidadeStock - intQuantidadeRegistrada; 
+
 					stock[i][3] = to_string(quantFinal);
 					cout << "Venda registrada com sucesso. Quantidade restante: " << stock[i][3] << endl;
+
+					compraAtual[totalCompras][0] = stock[i][1];
+					compraAtual[totalCompras][1] = stock[i][2];
+					compraAtual[totalCompras][2] = quantRegistrada; 
+					totalCompras++;
+					break;
 				}
 				else {
-					cout << "Quantidade insuficiente no stock.";
+					cout << "Quantidade insuficiente no stock."; 
 				}
+				  
+				break; 
 			}
-			break;
 		}
+
 		if (!idEncontrado) {
 			cout << "ID incorreto!" << endl; 
 		}
-		cout << endl;
-	} while (idBusca != "sair"); 
-	
 
+		numFatura++;
+		numCliente++;
+
+		double valorConsumidor;
+		double intValorProduto = stoi(compraAtual[totalCompras][2]);
+		double iva = intValorProduto * 0.3;
+		int intQuantRegistrada = stoi(quantRegistrada);
+		double totalIva = (intValorProduto + iva) * intQuantRegistrada; 
+
+		do
+		{
+			cout << endl;
+			cout << "Digite o valor entregue pelo consumidor ou [0] para sair: ";
+			cin >> valorConsumidor;
+
+			if (valorConsumidor == 0) {
+				break; 
+			}
+
+			bool trocoCerto = false; 
+				if (valorConsumidor <= totalIva) {
+					trocoCerto = true;
+					cout << endl;
+					cout << "---------------------------------" << endl;
+					cout << ">>>>>>>> Talão de Vendas <<<<<<<<" << endl;
+					cout << "---------------------------------" << endl;
+					cout << "Número da Fatura: " << numFatura << endl;
+					cout << "Número do Cliente: " << numCliente << endl;
+					cout << "Nome do Produto: " << compraAtual[totalCompras][1] << endl;
+					cout << "Quantidade: " << quantRegistrada << endl;
+					cout << fixed << setprecision(2) << "Valor s/IVA: " << compraAtual[totalCompras][2] << endl;
+					cout << fixed << setprecision(2) << "IVA: " << iva << endl;
+					cout << fixed << setprecision(2) << "Total c/IVA: " << endl;
+					cout << fixed << setprecision(2) << "Valor entregue: " << endl;
+					cout << fixed << setprecision(2) << "Troco:  " << endl;
+					cout << "Data: " << endl;
+					cout << "---------------------------------" << endl;
+				}
+				else {
+					cout << "Dinheiro insuficiente!" << endl;
+				}
+		} while (true);
+		
+
+	} while (true); 
 	
 }
 
-void menu(string stock[][20], int& totalProdutos, int produtos) { 
+void menu(string stock[][4], int& totalProdutos, int produtos) { 
 	int selc;
 	
 	do
@@ -166,6 +232,7 @@ void menu(string stock[][20], int& totalProdutos, int produtos) {
 		case 5:
 			cout << "Saindo...";
 		default:
+			cout << "Opção inválida!";
 			break;
 		}
 
@@ -178,7 +245,7 @@ int main() {
 	setlocale(LC_ALL, "");
 
 	//stock
-	const int produtos = 20, colunas = 20; 
+	const int produtos = 20, colunas = 4; 
 	string stock[produtos][colunas]; 
 	int totalProdutos = 2; 
 
@@ -194,7 +261,7 @@ int main() {
 
 
 	//menu
-	menu(stock, totalProdutos, produtos);   
+	menu(stock, totalProdutos, produtos);    
 	return 0;
 }
 
