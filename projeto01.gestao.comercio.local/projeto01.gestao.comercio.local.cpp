@@ -1,11 +1,12 @@
 #include <iostream>
 #include<iomanip> 
 #include<string>
-#include<locale>
-#include<ctime> 
+#include<locale> // ortografia UTF-8
+#include<ctime> // data
 
 
 using namespace std;
+
 
 
 
@@ -37,7 +38,6 @@ void addProduto(string stock[][5], int& totalProdutos, int produtos) {
 	cout << "_________________________" << endl;
 	cout << ">>> Adicionar Estoque <<<" << endl;
 	cout << "-------------------------" << endl;
-	exibirStock(stock, totalProdutos);
 	cout << endl;
 
 	string dadosProdutos[5];
@@ -46,10 +46,12 @@ void addProduto(string stock[][5], int& totalProdutos, int produtos) {
 	cin.ignore(); 
 	for (int i = 0; i < 5 ; i++)
 	{
-		cout << "Qual " << tipos[i] << " do produto: ";
+		cout << "Qual " << tipos[i] << " do produto para registrar ou [0] para sair: ";
 		getline(cin, dadosProdutos[i]);
-	}
-	
+		if (dadosProdutos[0] == "0") {
+			return; 
+		}
+	}    
 
 	for (int i = 0; i < 5; i++)
 	{
@@ -111,7 +113,7 @@ void excluirProduto(string stock[][5], int& totalProdutos) {
 		}  
 	}
 	if (!idEncontrado) {
-		cout << "ID não encontrado!";
+		cout << "ID nao encontrado!";
 	}
 }
 
@@ -161,6 +163,7 @@ string obterDataAtual() {
 	return string(buffer); //retorna a data como uma string
 } 
 
+
 void checkout(string stock[][5], int totalProdutos) {
 
 	string idBusca, quantRegistrada;
@@ -178,14 +181,14 @@ void checkout(string stock[][5], int totalProdutos) {
 		getline(cin, idBusca); 
 
 		if (idBusca == "0") {
-			break; //encerra e volta para o menu principal
-		} 
+			return; //encerra e volta para o menu principal
+		}  
 
-		bool idEncontrado = false;  
+		bool idEncontrado = false;   
 		for (int i = 0; i < totalProdutos; i++)
 		{
 			if (stock[i][0] == idBusca) {
-				idEncontrado = true;  
+				idEncontrado = true;   
 				cout << "ID registrado...";  
 
 				cout << "Qual a quantidade que deseja registrar: ";
@@ -202,7 +205,7 @@ void checkout(string stock[][5], int totalProdutos) {
 
 					//adicionar produto a matriz da compra
 					compraAtual[totalCompras][0] = stock[i][1];
-					compraAtual[totalCompras][1] = stock[i][2];
+					compraAtual[totalCompras][1] = stock[i][4];
 					compraAtual[totalCompras][2] = quantRegistrada; 
 					totalCompras++; 
 				}
@@ -243,23 +246,23 @@ void checkout(string stock[][5], int totalProdutos) {
 		cout << "_________________________________" << endl;   
 		cout << "Nome do Produto: " << compraAtual[i][0] << endl;
 		cout << "Quantidade: " << intQuantRegistrada << endl;
-		cout << fixed << setprecision(2) << "Valor s/IVA: €" << intValorUnitario << endl;
-		cout << fixed << setprecision(2) << "IVA: €" << iva << endl;
-		cout << fixed << setprecision(2) << "Total c/IVA: €" << totalIva << endl;
+		cout << fixed << setprecision(2) << "Valor s/IVA: " << intValorUnitario << endl;
+		cout << fixed << setprecision(2) << "IVA: " << iva << endl;
+		cout << fixed << setprecision(2) << "Total c/IVA: " << totalIva << endl;
 		cout << "---------------------------------" << endl; 
 	}
 
 	double valorConsumidor = 0.0;
 	do
 	{
-		cout << "Total Geral da Compra: €" << fixed << setprecision(2) << totalGeral << endl;
+		cout << "Total Geral da Compra: " << fixed << setprecision(2) << totalGeral << endl;
 		cout << "Digite o valor entregue pelo consumidor ou [0] para finalizar a venda: ";
 		cin >> valorConsumidor;
 		cout << "-------------------------------" << endl; 
 
 		if (valorConsumidor == 0) {
 			cout << "Venda cancelada!" << endl; 
-			break;
+			break; 
 		}
 
 		bool trocoCerto = false;
@@ -281,8 +284,45 @@ void checkout(string stock[][5], int totalProdutos) {
 	
 }
 
+void menu2(string stock[][5], int totalProdutos, int produtos) {
+	int selc2;
+
+	do
+	{
+		cout << endl;
+		cout << "1. Adicionar Produto ao Stock" << endl;
+		cout << "2. Remover Produto do Stock" << endl;
+		cout << "3. Atualizar Stock Existente" << endl;
+		cout << "4. Sair" << endl;
+		cout << "Escolha uma opcao: ";
+		cin >> selc2; 
+
+		switch (selc2) 
+		{
+		case 1: 
+			exibirStock(stock, totalProdutos);
+			addProduto(stock, totalProdutos, produtos);
+			break;
+		case 2:
+			exibirStock(stock, totalProdutos);
+			excluirProduto(stock, totalProdutos);
+			break;
+		case 3:
+			exibirStock(stock, totalProdutos);
+			addStockExistente(stock, totalProdutos, produtos); 
+			break;
+		case 4:
+			cout << "Saindo...";
+			break;
+		default:
+			cout << "Opcao invalida!";
+			break;
+		}
+	} while (selc2 != 4);
+}
+
 void menu(string stock[][5], int& totalProdutos, int produtos) { 
-	int selc;
+	int selc;  
 	
 	do
 	{
@@ -291,10 +331,8 @@ void menu(string stock[][5], int& totalProdutos, int produtos) {
 		cout << "Selecione uma opcao para continuar: " << endl;
 		cout << "------------------------------------" << endl;
 		cout << "1. Efetuar venda" << endl;
-		cout << "2. Adicionar Produto ao Stock" << endl;
-		cout << "3. Remover Produto do Stock" << endl;
-		cout << "4. Adicionar Stock Existente" << endl;
-		cout << "5. Sair" << endl;
+		cout << "2. Gestao do Stock" << endl;
+		cout << "3. Sair" << endl;
 		cout << "Escolha uma opcao: ";
 		cin >> selc;
 
@@ -302,24 +340,11 @@ void menu(string stock[][5], int& totalProdutos, int produtos) {
 		{
 		case 1:
 			checkout(stock, totalProdutos); 
-			cout << "\nPressione qualquer tecla para voltar ao menu...";
 			break;
 		case 2:
-			exibirStock(stock, totalProdutos); 
-			addProduto(stock, totalProdutos, produtos);  
-			cout << "\nPressione qualquer tecla para voltar ao menu...";
+			menu2(stock, totalProdutos, produtos);
 			break;
 		case 3:
-			exibirStock(stock, totalProdutos); 
-			excluirProduto(stock, totalProdutos); 
-			cout << "\nPressione qualquer tecla para voltar ao menu...";
-			break;
-		case 4:
-			exibirStock(stock, totalProdutos);  
-			addStockExistente(stock, totalProdutos, produtos);  
-			cout << "\nPressione qualquer tecla para voltar ao menu...";
-			break;
-		case 5:
 			cout << "Saindo...";
 			break;
 		default:
@@ -327,7 +352,7 @@ void menu(string stock[][5], int& totalProdutos, int produtos) {
 			break;
 		}
 
-	} while (selc != 5);
+	} while (selc != 3);
 }
 
 int main() {
@@ -359,4 +384,32 @@ int main() {
 
 
 
+/*
+//funcao para verificar se uma string contem apenas letras e espacos
+bool validarString(const string& str) {
+	for (char ch : str) {
+		// verifica se o caractere nao e uma letra nem um espaco
+		if (!isalpha(ch) && !isspace(ch) && isdigit(ch)) {
+			return false; //se encontrar um caractere invalido, retorna falso
+		}
+	}
+	return true; //se todos os caracteres forem verdadeiro, retorna verdadeiro
+}
 
+//funcao para solicitar uma string valida ao usuario
+string solicitarString(const string& mensagem) {
+	string entrada;
+	while (true)
+	{
+		cout << mensagem;
+		getline(cin, entrada);
+
+		if (validarString(entrada)) {
+			return entrada; //retorna string se for valida
+		}
+		else {
+			cout << "Entrada invalida! Use apenas letras e espacos." << endl;
+		}
+	}
+} 
+*/
